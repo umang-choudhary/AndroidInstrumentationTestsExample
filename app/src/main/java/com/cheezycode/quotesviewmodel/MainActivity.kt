@@ -10,7 +10,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 
 class MainActivity : AppCompatActivity() {
-    lateinit var mainViewModel: MainViewModel
+    private lateinit var mainViewModel: MainViewModel
 
     private val quoteText: TextView
         get() = findViewById(R.id.quoteText)
@@ -22,17 +22,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
+        val factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 MainViewModel(applicationContext)
             }
         }
-        mainViewModel = ViewModelProvider(this, Factory).get(MainViewModel::class.java)
+        mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         setQuote(mainViewModel.getQuote())
 
     }
 
-    fun setQuote(quote:Quote){
+    private fun setQuote(quote:Quote){
         quoteText.text = quote.text
         quoteAuthor.text = quote.author
     }
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     fun onShare(view: View) {
         val intent = Intent(Intent.ACTION_SEND)
-        intent.setType("text/plain")
+        intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, mainViewModel.getQuote().text)
         startActivity(intent)
     }

@@ -23,9 +23,9 @@ class MainViewModel(val context: Context): ViewModel() {
         return gson.fromJson(json, Array<Quote>::class.java)
     }
 
-    fun getQuote() = quoteList[index]
+    fun getQuote() = quoteList[(index + quoteList.size) % quoteList.size]
 
-    fun nextQuote() = quoteList[++index % quoteList.size]
+    fun nextQuote() = quoteList[(++index + quoteList.size) % quoteList.size]
 
     fun previousQuote() = quoteList[(--index + quoteList.size) % quoteList.size]
 }
